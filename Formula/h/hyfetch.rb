@@ -8,8 +8,8 @@ class Hyfetch < Formula
   license "MIT"
   head "https://github.com/hykilpikonna/hyfetch.git", branch: "master"
   
-  depends_on "python@3.11"
-  
+  depends_on "python"
+
   on_macos do
     depends_on "screenresolution"
   end
