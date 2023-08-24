@@ -14,6 +14,8 @@ class Hyfetch < Formula
     depends_on "screenresolution"
   end
 
+  conflicts_with "neofetch", because: "conflicting name"
+
   resource "typing-extensions" do
     url "https://files.pythonhosted.org/packages/3c/8b/0111dd7d6c1478bf83baa1cab85c686426c7a6274119aceb2bd9d35395ad/typing_extensions-4.7.1.tar.gz"
     sha256 "b75ddc264f0ba5615db7ba217daeb99701ad295353c45f9e95963337ceeeffb2"
@@ -21,6 +23,9 @@ class Hyfetch < Formula
 
   def install
     virtualenv_install_with_resources
+    inreplace "neofetch", "/usr/local", HOMEBREW_PREFIX
+    bin.install "neofetch" => "neofetch"
+    man1.install "neofetch.1" => "neofetch.1"
   end
 
   test do
@@ -41,7 +46,7 @@ class Hyfetch < Formula
       "pride_month_disable": false
     }
     EOS
-    system "#{bin}/neowofetch", "--config", "none", "--color_blocks", "off",
+    system "#{bin}/neofetch", "--config", "none", "--color_blocks", "off",
                               "--disable", "wm", "de", "term", "gpu"
     system "#{bin}/hyfetch", "-C", testpath/"hyfetch.json", "--args=\"--config none --color_blocks off --disable wm de term gpu\""
   end
