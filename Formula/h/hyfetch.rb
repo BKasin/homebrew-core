@@ -8,7 +8,7 @@ class Hyfetch < Formula
   license "MIT"
   head "https://github.com/hykilpikonna/hyfetch.git", branch: "master"
   
-  depends_on "python"
+  depends_on "python@3.11"
 
   on_macos do
     depends_on "screenresolution"
@@ -21,5 +21,28 @@ class Hyfetch < Formula
 
   def install
     virtualenv_install_with_resources
+  end
+
+  test do
+    (testpath/".config/hyfetch.json").write <<-EOS
+    {
+      "preset": "genderfluid",
+      "mode": "rgb",
+      "light_dark": "dark",
+      "lightness": 0.5,
+      "color_align": {
+        "mode": "horizontal",
+        "custom_colors": [],
+        "fore_back": null
+      },
+      "backend": "neofetch",
+      "distro": null,
+      "pride_month_shown": [],
+      "pride_month_disable": false
+    }
+    EOS
+    system "#{bin}/neowofetch", "--config", "none", "--color_blocks", "off",
+                              "--disable", "wm", "de", "term", "gpu"
+    system "#{bin}/hyfetch", "-C", testpath/"hyfetch.json", "--args=\"--config none --color_blocks off --disable wm de term gpu\""
   end
 end
